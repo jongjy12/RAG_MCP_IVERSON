@@ -347,7 +347,7 @@ def create_app(bridge=None):
     @app.get('/chat/history')
     def history():
         current=state()
-        return jsonify(dataset_id=current['selected'],messages=current['history'].get(current['selected'],[]))
+        return jsonify(dataset_id=current['selected'],messages=current['history'].get(current['selected'] or '__web__',[]))
 
     @app.post('/ask')
     def ask():
@@ -356,17 +356,22 @@ def create_app(bridge=None):
         question=body.get('question','')
         if not isinstance(question,str) or not question.strip() or len(question)>4000: raise ValueError('Enter a question of 1-4000 characters.')
         dataset_id=current['selected']
-        if not dataset_id: raise ValueError('Select a ready dataset first.')
+        from agent.web_search import parse_command
+        web_search, query = parse_command(question)
+        if web_search and not query:
+            return jsonify(answer='Use /websearch followed by a question. Example: /websearch What do the Titanic dataset columns mean?',dataset_id=dataset_id,web_search=True,tool_calls=[],sources=[])
+        if not dataset_id and not web_search: raise ValueError('Select a dataset or use /websearch followed by a question.')
+        history_key = dataset_id or '__web__'
         if body.get('dataset_id',dataset_id)!=dataset_id: raise ValueError('Question dataset differs from the selected dataset.')
         with state_lock:
             if current['chat_busy']: return jsonify(error='Wait for the current answer.'),409
             current['chat_busy']=True
-            previous=list(current['history'].get(dataset_id,[]))
+            previous=list(current['history'].get(history_key,[]))
         try:
-            result=mcp.run(ai_agent.answer(question,dataset_id,previous),timeout=300)
-            info=storage.manifest(dataset_id)
-            result['dataset_name']=info['name']
-            records=current['history'].setdefault(dataset_id,[])
+            task = ai_agent.answer(query,dataset_id,previous,web_search=True) if web_search else ai_agent.answer(question,dataset_id,previous)
+            result=mcp.run(task,timeout=300)
+            result['dataset_name']=storage.manifest(dataset_id)['name'] if dataset_id else None
+            records=current['history'].setdefault(history_key,[])
             records.append({'question':question,**result})
             del records[:-12]
             return jsonify(result)

@@ -135,7 +135,7 @@ async def rag_search_dataset(dataset_id: str, query: str, top_k: int = 5,
 
 @server.tool
 async def tavily_search(query: str, max_results: int = 5) -> dict:
-    """Application-only dataset discovery through hosted Tavily MCP. Never indexes files."""
+    """Web search and dataset discovery through hosted Tavily MCP. Never indexes files."""
     if not cfg.TAVILY_KEY:
         raise ValueError('Dataset search needs TAVILY_API_KEY. Local upload and analysis remain available.')
     if not query.strip() or len(query)>500 or not 1<=max_results<=5:

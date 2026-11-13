@@ -168,3 +168,9 @@ suite. The Windows benchmark records import time and the peak working-set sum
 of its owned processes in `runtime/chunk_extension_benchmark.json` and removes
 its temporary datasets when finished.
 
+
+### Chat web search
+
+Type `/websearch <question>` in chat to search through the existing Tavily MCP connection and receive an answer with source links. It works without a selected dataset. `/websearch` alone displays usage help. Queries are limited to 500 characters and one basic search (up to five results) per turn. Requires the existing Tavily and OpenRouter configuration.
+
+Ordinary chat questions continue to use dataset tools only. With a dataset selected, explicitly ask to compare it with web context if both are needed; calculations and web context are distinguished in the answer. Web search does not download or import datasets. Use Find dataset online for ingestion. Sources are bounded search excerpts, not guaranteed full-page content. Chat without a dataset has a separate session history.

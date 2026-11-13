@@ -34,7 +34,8 @@
       <div id="questionSuggestions" class="question-suggestions" aria-label="Example questions"></div>
       <div id="chatFeed" class="chat-feed" aria-live="polite"><div class="empty-state"><strong>Start with a dataset.</strong><p>Find patterns. Compare groups. Understand the details.</p></div></div>
       <p id="chatStatus" class="status" role="status"></p>
-      <form id="askForm" class="composer"><label for="question" class="sr-only">Question about your dataset</label><input id="question" maxlength="4000" placeholder="Ask about your dataset…" autocomplete="off" disabled><button id="sendButton" class="button" disabled>Send ↑</button></form>
+      <p id="webSearchHint" class="muted small">Search the web: /websearch your question</p>
+      <form id="askForm" class="composer"><label for="question" class="sr-only">Question about your dataset or the web</label><input id="question" maxlength="4000" placeholder="Ask about your dataset or /websearch …" aria-describedby="webSearchHint" autocomplete="off" disabled><button id="sendButton" class="button" disabled>Send ↑</button></form>
     </section>
   </section>
   <p class="footer">Local demo · Up to three prepared datasets · Re-upload after restarting</p>

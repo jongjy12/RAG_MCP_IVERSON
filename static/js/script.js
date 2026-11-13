@@ -181,8 +181,8 @@ function controls() {
   $('file').disabled = preparing || asking || unknownCompletion;
   $('findDataset').disabled = preparing || asking;
   $('datasetPicker').disabled = preparing || asking;
-  $('sendButton').disabled = !selectedId || preparing || asking;
-  $('question').disabled = !selectedId || preparing || asking;
+  $('sendButton').disabled = preparing || asking;
+  $('question').disabled = preparing || asking;
   $('searchButton').disabled = searching || preparing || unknownCompletion;
   $('searchLimit').disabled = searching || preparing || unknownCompletion;
   $('searchTopic').disabled = searching || preparing;
@@ -287,7 +287,16 @@ function resultTable(records, parent) {
 }
 function showAnswer(result) {
   const message=node('article',undefined,'message assistant');
-  message.append(node('div',`ANALYST · ${result.dataset_name || 'Selected dataset'}`,'answer-label'),DatasetMarkdown.render(result.answer));
+  message.append(node('div',`ANALYST · ${result.web_search ? 'Web search' : (result.dataset_name || 'Selected dataset')}`,'answer-label'),DatasetMarkdown.render(result.answer));
+  if (result.sources?.length) {
+    const sources=node('div',undefined,'web-sources'); sources.append(node('strong','Sources'));
+    for(const source of result.sources){
+      try { const url=new URL(source.url); if(!['http:','https:'].includes(url.protocol)||url.username||url.password)continue;
+        const link=node('a',source.title||url.hostname);link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';sources.append(link);
+      } catch { /* Ignore malformed source URLs. */ }
+    }
+    message.append(sources);
+  }
   if (result.tool_calls?.length) {
     const count=result.tool_calls.length;
     const evidence=node('details',undefined,'evidence'); evidence.append(node('summary',`${count} tool ${count===1?'call':'calls'} · calculations & sources`));
@@ -303,7 +312,7 @@ function showAnswer(result) {
 async function chatHistory() {
   const data=await api('/chat/history'); $('chatFeed').replaceChildren();
   if (!data.messages.length) {
-    const empty=node('div',undefined,'empty-state'); empty.append(node('strong',selectedId?'What would you like to know?':'Start with a dataset.'),node('p',selectedId?'Try “How many records are there?” or compare groups.':'Upload a file or find a dataset online.')); $('chatFeed').append(empty);
+    const empty=node('div',undefined,'empty-state'); empty.append(node('strong',selectedId?'What would you like to know?':'Start with a dataset.'),node('p',selectedId?'Try “How many records are there?” or compare groups.':'Upload a file, find a dataset, or ask /websearch followed by a question.')); $('chatFeed').append(empty);
   }
   for (const record of data.messages) { $('chatFeed').append(node('div',record.question,'message user')); showAnswer(record); }
 }
@@ -459,9 +468,10 @@ $('downloadOnly').addEventListener('click',async()=>{
   finally { finishProgress(); preparing=false; controls(); }
 });
 $('askForm').addEventListener('submit',async e=>{
-  e.preventDefault(); const question=$('question').value.trim(); if(!question || asking || !selectedId)return;
+  e.preventDefault(); const question=$('question').value.trim(); if(!question || asking)return;
+  if(!selectedId && !/^\/websearch(?:\s|$)/i.test(question)){status('chatStatus','Select a dataset or use /websearch followed by a question.','error');return;}
   const requestDataset=selectedId; asking=true; controls(); $('chatFeed').querySelector('.empty-state')?.remove();
-  $('chatFeed').append(node('div',question,'message user')); $('question').value='';status('chatStatus','Thinking and checking your data…');
+  $('chatFeed').append(node('div',question,'message user')); $('question').value='';status('chatStatus',/^\/websearch(?:\s|$)/i.test(question)?'Searching the web…':'Thinking and checking your data…');
   try { const result=await post('/ask',{question,dataset_id:requestDataset}); showAnswer(result); status('chatStatus',''); }
   catch(error){status('chatStatus',error.message,'error');}
   finally{asking=false;controls();$('question').focus();}
