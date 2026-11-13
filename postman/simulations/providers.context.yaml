@@ -1,0 +1,30 @@
+purpose:
+  stands_in_for: Tavily Search MCP, OpenRouter-compatible chat responses, and the Kaggle SDK dataset download operation
+  unblocks: Local demo caller verification without live provider calls
+assumptions:
+  - id: provider-protocol-fixtures
+    status: supported
+    claim: The application exercised legacy MCP initialization, tools/list and tools/call, dataset result deduplication, and a three-call scoped chat workflow against these local fixtures.
+    reason: The integration test ran real HTTP aggregator and STDIO Pandas/RAG processes with the cached SentenceTransformer model and FAISS. The fixture supports the prototype-compatible provider response shapes. Provider owner search was skipped because this CLI has no status command or configured workspace. Live provider compatibility and credentials remain unverified.
+    verification: >-
+      On 2026-11-04 all seven checks passed. The simulation request log showed MCP discover fallback to initialize, Search calls, dataset CSV HTTP fetches, and three OpenAI-compatible chat completions. The test checked saved files, temporary cleanup, scoped count/retrieval, unchanged selection on failure, separate chat histories, XLSX percentages and the resident-dataset limit. Only the source-download boundary was redirected to the local CSV fixture; public-URL rejection was checked independently. Legacy XLS conversion was tested with a real BIFF fixture.
+      On 2026-11-08, the full integration suite passed 52 tests against the local provider fixture. Its request log showed Tavily MCP discover fallback to initialize/tools/list/search, a dataset page fetch, and ZIP fetch. The fixture's unsupported discover request returned 501 and the application continued through initialization. These results verify the application against these fixtures, not live Tavily or chat-provider compatibility.
+      Later on 2026-11-08, after adding preparation status and normalized previews, 22 integration checks passed in tests/test_integration.py and tests/test_kaggle_download.py. The simulation log confirmed MCP initialization/search, dataset page and ZIP fetches, chat completions, Kaggle ZIP redirect/download, and modeled authentication/rate-limit failures. These checks preserve the existing search/download/ingestion paths against the local fixtures; they do not establish live provider behavior or browser upload permissions.
+      After the header, grounding, and discovery-quality changes, 64 local tests passed (5 provider-dependent skips) and all 22 provider/MCP integration checks passed again. Node checks exercised uncertain-header action guards, header overrides, row-count updates, and existing Markdown rendering. A separate live evaluation of the actual agent loop with fixed public Titanic tool results produced correct comparative rates and acknowledged causal limitations in both why/adversarial cases. This is bounded model evidence, not a guarantee for all prompts. Browser opening of the isolated fixture was blocked by origin approval, so a visual walkthrough of these changes remains unverified.
+    source: postman/simulations/providers.sim.yaml; postman/mocks/providers/default.js; aggregator/aggregator_server.py; agent/ai_agent.py; tests/
+    updated_at: '2026-11-08'
+  - id: kaggle-sdk-download
+    status: supported
+    claim: The official Kaggle SDK caller handles ZIP responses and sanitized 401, 403, and 429 failures under this fixture, and drops Authorization on a cross-host download redirect.
+    reason: The real SDK posted ownerSlug and datasetSlug to the simulated download operation. Its redirect from 127.0.0.1 to localhost reached a fixture endpoint that rejects any Authorization header. Fixture tokens were used; these scenarios do not establish all live Kaggle account or consent behavior.
+    verification: >-
+      On 2026-11-07, 38 tests passed across Kaggle, archive inspection, analytics, and real local RAG/Pandas MCP integration. Simulation logs showed POST download returning 302, a credential-free GET returning ZIP bytes, and the modeled 401/403/429 responses. Additional local tests covered file selection, export-only behavior, selected-file ingestion/provenance, missing credentials, timeout termination, transfer limits, and temporary cleanup. A separate live download using locally configured credentials returned amazon.csv with 1465 rows and 16 columns from karkavelrajaj/amazon-sales-dataset; live FAISS ingestion of that particular file was not performed at that time.
+      On 2026-11-08, the full integration suite passed 52 tests and the fixture log again showed the Kaggle SDK redirect to a credential-free ZIP fetch, plus modeled 401/403/429 responses. Separately, the live benchmark downloaded and ingested the Amazon CSV through the real MCP/FAISS path: 1465 rows, 16 columns, 13017 chunks, 452.51 seconds with a warm model. See tests/benchmark_amazon_ingestion.py and runtime/chunk_extension_benchmark.json. These observations are specific to this dataset and run; they do not establish a performance guarantee for other data or cold model startup.
+    source: web_search_mcp/kaggle_worker.py; web_search_mcp/kaggle_download.py; tests/test_kaggle_download.py; tests/benchmark_amazon_ingestion.py; runtime/chunk_extension_benchmark.json; postman/mocks/providers/default.js; installed kagglesdk 0.1.38
+    updated_at: '2026-11-08'
+fingerprints:
+  - id: initial-local-fixtures
+    date: '2026-11-04'
+    commit: null
+    cli: '1.73.0'
+

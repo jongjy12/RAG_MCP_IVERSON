@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dataset Analyst</title>
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/chat-markdown.css') }}">
+  <script defer src="{{ url_for('static',filename='vendor/marked/marked.umd.js') }}"></script>
+  <script defer src="{{ url_for('static',filename='js/markdown.js') }}"></script>
+  <script defer src="{{ url_for('static',filename='js/script.js') }}"></script>
+</head>
+<body>
+<main class="app">
+  <header class="topbar"><span class="brand-icon" aria-hidden="true">▥</span><div><strong>Dataset Analyst</strong><p>A workspace for your tables</p></div><span id="connectionStatus" class="connection">Connecting…</span></header>
+  <section class="workspace">
+    <aside class="sidebar" aria-label="Upload and dataset details">
+      <h2>1. Add a file</h2>
+      <form id="uploadForm">
+        <div class="drop-zone" id="dropZone"><span class="upload-icon" aria-hidden="true">↑</span><strong>Drop your file here</strong><p>or select a file from your device</p><label class="button" for="file">Choose file</label><input id="file" name="file" type="file" accept=".csv,.xlsx,.xls" class="file-input"></div>
+        <p id="chosenFile" class="muted small">CSV, XLSX, XLS · up to 10 MiB</p>
+        <button id="uploadButton" class="button full" type="submit" disabled>Upload &amp; prepare</button>
+      </form>
+      <div class="or"><span>or</span></div>
+      <button id="findDataset" type="button" class="button secondary full">Find dataset online <span aria-hidden="true">↗</span></button>
+      <p id="uploadStatus" class="status" role="status" aria-live="polite"></p>
+      <div id="uploadProgress" class="preparation-progress" hidden role="status"></div>
+      <section class="dataset-section"><h2>2. Select a dataset</h2><label for="datasetPicker" class="sr-only">Active dataset</label><select id="datasetPicker"><option value="">No dataset selected</option></select>
+        <div id="datasetDetails" tabindex="-1"><p class="muted small">Your dataset details will appear here.</p></div>
+      </section>
+    </aside>
+    <section class="chat-panel" aria-label="Dataset chat">
+      <header><h2>Ask a question</h2><p class="muted small">Explore your selected dataset.</p></header>
+      <details id="dataPreview" class="data-preview" hidden><summary>Preview dataset</summary><div class="preview-toolbar"><label for="previewTable">Table / sheet</label><select id="previewTable"></select></div><p id="previewCaption" class="muted small"></p><div id="previewContent"></div></details>
+      <div id="questionSuggestions" class="question-suggestions" aria-label="Example questions"></div>
+      <div id="chatFeed" class="chat-feed" aria-live="polite"><div class="empty-state"><strong>Start with a dataset.</strong><p>Find patterns. Compare groups. Understand the details.</p></div></div>
+      <p id="chatStatus" class="status" role="status"></p>
+      <form id="askForm" class="composer"><label for="question" class="sr-only">Question about your dataset</label><input id="question" maxlength="4000" placeholder="Ask about your dataset…" autocomplete="off" disabled><button id="sendButton" class="button" disabled>Send ↑</button></form>
+    </section>
+  </section>
+  <p class="footer">Local demo · Up to three prepared datasets · Re-upload after restarting</p>
+</main>
+<dialog id="searchModal" aria-labelledby="modalTitle">
+  <div class="modal-header"><div><p class="eyebrow">DISCOVER</p><h2 id="modalTitle">Find a dataset online</h2></div><button id="closeModal" class="icon-button" aria-label="Close dataset search" type="button">×</button></div>
+  <div class="search-stepbar"><button id="backToResults" class="button secondary" type="button" hidden>← Back to results</button><span id="searchStepLabel" class="muted small">Step 1 of 2 · Find a dataset</span></div>
+  <div class="search-modal-content">
+  <p id="searchIntro" class="muted">Search public datasets and select a result.</p>
+  <form id="searchForm" class="search-form"><div class="topic-field"><label for="searchTopic">Dataset topic</label><input id="searchTopic" placeholder="e.g. Titanic passengers" maxlength="300" required></div><div class="result-size-field"><label for="searchLimit">Result size</label><select id="searchLimit"><option value="1">1 result</option><option value="2">2 results</option><option value="3">3 results</option><option value="4">4 results</option><option value="5" selected>5 results</option><option value="6">6 results</option><option value="7">7 results</option><option value="8">8 results</option><option value="9">9 results</option><option value="10">10 results</option></select></div><button id="searchButton" class="button" type="submit">Search</button></form>
+  <p id="searchStatus" class="status" role="status" aria-live="polite"></p>
+  <div id="searchProgress" class="preparation-progress" hidden role="status"></div>
+  <div id="candidates" class="candidates"><p class="muted empty-search">Enter a topic to find datasets.</p></div>
+  <div id="inspectionPanel" class="candidates" hidden></div>
+  </div>
+  <footer class="modal-actions"><p id="reviewActionHelp" class="muted small" hidden>Download to your device, or use the dataset for analysis.</p><button id="downloadOnly" class="button secondary" type="button" disabled hidden>Download only</button><button id="useDataset" class="button" type="button" disabled>Review</button></footer>
+</dialog>
+</body>
+</html>

@@ -1,0 +1,78 @@
+/* Answer typography stays independent of the compact tool-evidence tables. */
+.message { flex-shrink: 0; }
+.answer-label { margin-bottom: 12px; color: #9fabA4; line-height: 1.6; }
+.answer-text.markdown-body {
+  white-space: normal;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #d7dcd9;
+  min-width: 0;
+  max-width: 100%;
+}
+.markdown-body > :first-child { margin-top: 0; }
+.markdown-body > :last-child { margin-bottom: 0; }
+.markdown-body p { margin: 0 0 1em; }
+.markdown-body strong { color: #f1f5f2; font-weight: 650; }
+.markdown-body h1, .markdown-body h2, .markdown-body h3,
+.markdown-body h4, .markdown-body h5, .markdown-body h6 {
+  color: #f0f4f1;
+  font-weight: 620;
+  letter-spacing: -.02em;
+  line-height: 1.45;
+  margin: 1.5em 0 .65em;
+}
+.markdown-body h1 { font-size: 1.6em; }
+.markdown-body h2 { font-size: 1.3em; }
+.markdown-body h3 { font-size: 1.12em; }
+.markdown-body h4, .markdown-body h5, .markdown-body h6 { font-size: 1em; }
+.markdown-body ul, .markdown-body ol { margin: .65em 0 1.1em; padding-left: 1.7em; }
+.markdown-body li { margin: .35em 0; padding-left: .15em; }
+.markdown-body li::marker { color: #9eb5a6; font-variant-numeric: tabular-nums; }
+.markdown-body li > p { margin: .35em 0; }
+.markdown-body li > ul, .markdown-body li > ol { margin: .35em 0 .65em; }
+.markdown-body .task-list-item { list-style: none; }
+.markdown-body .task-list-item input {
+  accent-color: #a9d9b8;
+  min-width: auto;
+  margin: 0 .6em 0 -1.4em;
+  vertical-align: middle;
+}
+.markdown-body a { color: #b4ddc3; text-underline-offset: 3px; text-decoration-color: #688573; }
+.markdown-body a:hover { color: #d6f4e0; text-decoration-color: currentColor; }
+.markdown-body code {
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: .9em;
+  padding: .12em .4em;
+  color: #dfebe3;
+  background: #27312b;
+  border: 1px solid #36443c;
+  border-radius: 5px;
+  overflow-wrap: anywhere;
+}
+.markdown-code-block { margin: 1em 0; border: 1px solid #343e37; border-radius: 11px; overflow: hidden; background: #111714; }
+.markdown-code-block .code-language { padding: 7px 13px; border-bottom: 1px solid #343e37; color: #9eb6a7; background: #1e2721; font-size: 10px; letter-spacing: .06em; }
+.markdown-code-block pre { margin: 0; padding: 14px; overflow: auto; max-height: 350px; line-height: 1.65; white-space: pre; }
+.markdown-code-block pre code { border: 0; border-radius: 0; padding: 0; background: transparent; font-size: 11px; overflow-wrap: normal; }
+.markdown-body blockquote { margin: 1em 0; padding: 12px 16px; border-left: 3px solid #6d967d; background: #a9d9b808; border-radius: 0 8px 8px 0; color: #b8c8be; }
+.markdown-body blockquote > :last-child { margin-bottom: 0; }
+.markdown-body hr { margin: 1.6em 0; border: 0; border-top: 1px solid #354039; }
+.markdown-table-wrap { max-width: 100%; margin: 1em 0 1.25em; overflow-x: auto; border: 1px solid #3a453e; border-radius: 11px; background: #191e1b; scrollbar-width: thin; scrollbar-color: #4c6154 #191e1b; }
+.markdown-table-wrap:focus-visible { outline: 2px solid #a9d9b8; outline-offset: 3px; }
+.markdown-table-wrap .markdown-table { width: 100%; min-width: 320px; border-collapse: separate; border-spacing: 0; white-space: normal; font-size: 12px; line-height: 1.6; }
+.markdown-table th, .markdown-table td { padding: 11px 14px; border: 0; border-bottom: 1px solid #323d36; vertical-align: top; text-align: left; overflow-wrap: anywhere; min-width: 80px; }
+.markdown-table th { color: #d8e9de; font-size: 11px; font-weight: 650; background: #253129; }
+.markdown-table tbody tr:nth-child(even) { background: #ffffff03; }
+.markdown-table tbody tr:hover { background: #a9d9b808; }
+.markdown-table tbody tr:last-child td { border-bottom: 0; }
+.markdown-table td { font-variant-numeric: tabular-nums; }
+.markdown-table .align-right { text-align: right; }
+.markdown-table .align-center { text-align: center; }
+.markdown-body .markdown-fallback { white-space: pre-wrap; }
+.evidence { margin-top: 17px; border-color: #303a33; background: #171c19; }
+.evidence > summary { padding: 2px 0; color: #9fbaa9; font-size: 11px; }
+.evidence > details { margin-top: 10px; padding-top: 9px; border-top: 1px solid #2d3630; }
+@media (max-width: 620px) {
+  .answer-text.markdown-body { font-size: 12px; }
+  .markdown-table th, .markdown-table td { padding: 9px 11px; }
+  .markdown-table-wrap .markdown-table { font-size: 11px; }
+}

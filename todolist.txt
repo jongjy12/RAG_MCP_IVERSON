@@ -1,0 +1,8 @@
+1. mandatory - [done] clear the dataset dropdown when the application stops or restarts
+2. mandatory - [done] restore the result size dropdown in find a dataset online (maximum 10 results)
+3. optional - implement chathistory
+4. mandatory - [done] support ZIP files in automated dataset search: allow a direct ZIP download link, download the archive to a temporary directory, safely extract it, and scan its contents for importable CSV/XLSX files. Recognize validated CSV-like `.data` files such as UCI Iris, with appropriate header handling. If multiple data files are found, let the user choose which one to import. Stage only the selected data file and send it through the existing RAG MCP ingestion flow; clean up the archive and extracted temporary files after success or failure.
+5. mandatory - [done] support authenticated Kaggle dataset ZIP downloads using KAGGLE_API_TOKEN from FinalProject/.env, with shared file inspection/selection, download-only export, RAG MCP ingestion, bounded downloads and temporary-file cleanup.
+6. mandatory - [done] extend the configured RAG chunk allowance to 15,000 and ingestion-only MCP timeout to 900 seconds. Verified the complete Amazon CSV (1,465 rows, 16 columns, 13,017 chunks) through real MCP/FAISS in 452.51 seconds with a warm model; retained existing chunking, all source fields, download-only behavior, exact analytics, retrieval and selection/error protections.
+7. UI issue - [done] show one “Find files” action for a selected dataset page, including when choosing among page downloads.
+8. UI issue - [done] use one inspection action for a selected direct file; after inspection, show the separate choices to download the file or use it as a dataset.

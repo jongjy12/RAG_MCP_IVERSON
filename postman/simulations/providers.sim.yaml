@@ -1,0 +1,7 @@
+simulation: dataset-demo-providers
+routing: path
+mocks:
+  - name: demo-providers
+    routeKey: providers
+    path: postman/mocks/providers/config.yaml
+

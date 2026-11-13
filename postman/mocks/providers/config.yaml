@@ -1,0 +1,12 @@
+version: 1
+name: demo-providers
+slug: providers
+protocol: http
+port: 4011
+description: Local protocol fixtures for Tavily MCP and the OpenRouter-compatible chat endpoint.
+interceptRequests: true
+scenarios:
+  - name: default
+    path: ./default.js
+    default: true
+
